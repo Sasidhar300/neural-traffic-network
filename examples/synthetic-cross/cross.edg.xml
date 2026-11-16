@@ -1,0 +1,10 @@
+<edges>
+    <edge id="north_in" from="north" to="1"/>
+    <edge id="south_in" from="south" to="1"/>
+    <edge id="east_in" from="east" to="1"/>
+    <edge id="west_in" from="west" to="1"/>
+    <edge id="north_out" from="1" to="north"/>
+    <edge id="south_out" from="1" to="south"/>
+    <edge id="east_out" from="1" to="east"/>
+    <edge id="west_out" from="1" to="west"/>
+</edges>

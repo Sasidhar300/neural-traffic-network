@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+.venv/
+.env*
+.DS_Store
+/checkpoints/
+/runs/
+*.pt
+*.pth
+/src/networks/
+*.sqlite3
+*.sqlite3-*

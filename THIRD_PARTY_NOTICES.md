@@ -1,0 +1,7 @@
+# Third-party notices
+
+- Eclipse SUMO is an external simulator from the Eclipse Foundation project and its contributors. This release provides synthetic input files and expects users to obtain the simulator separately. See the [Eclipse SUMO license and notices](https://github.com/eclipse-sumo/sumo/blob/main/LICENSE).
+- The historical evaluation used Ingolstadt21, distributed in the [RESCO benchmark](https://github.com/Pi-Star-Lab/RESCO) and based on the [InTAS scenario](https://github.com/silaslobo/InTAS). Credit Ault and Sharon for RESCO and the InTAS authors for the underlying scenario. The capstone copy carried a GPLv3 license text. The installer preserves the exact upstream v1.0 scenario license. The changed capstone network remains excluded. See the [scenario comparison](SCENARIO.md). For applicable map data, © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), available under the ODbL.
+- The release uses Django and links to versioned and unversioned CDN UI assets from Bootstrap, Bootstrap Icons, Popper, and Font Awesome. It imports PyTorch, PFRL, Gym, NumPy, pandas, matplotlib, seaborn, TraCI and sumolib. The dependencies are separately installed and carry their upstream licenses. No dependency source or binaries are bundled. A file-level third-party code provenance review remains open before source publication.
+
+The team’s original work is published with contributor permission under the [copyright notice](LICENSE). Third-party software and data retain their own terms.

@@ -1,0 +1,6 @@
+<routes>
+    <flow id="ns" begin="0" end="160" period="8" from="north_in" to="south_out"/>
+    <flow id="sn" begin="2" end="160" period="8" from="south_in" to="north_out"/>
+    <flow id="ew" begin="4" end="160" period="8" from="east_in" to="west_out"/>
+    <flow id="we" begin="6" end="160" period="8" from="west_in" to="east_out"/>
+</routes>

@@ -1,0 +1,359 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Simulation Results</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+	<header>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-primary">
+			<div class="container-fluid">
+				<a class="navbar-brand text-white" href="{% url 'home' %}">Neural Traffic Networks</a>
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#navbarNav"
+					aria-controls="navbarNav"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+					<ul class="navbar-nav">
+						<li class="nav-item px-3">
+							<a class="nav-link" href="{% url 'home' %}">Home</a>
+						</li>
+						<li class="nav-item px-3">
+							<a class="nav-link" href="{% url 'about' %}">About Us</a>
+						</li>
+						{% if user.is_authenticated %}
+						<li class="nav-item px-3">
+							<a class="nav-link" href="{% url 'signout' %}">Sign out</a>
+						</li>
+						{% else %}
+						<li class="nav-item px-3">
+							<a class="nav-link" href="{% url 'signin' %}">Sign In</a>
+						</li>
+						{% endif %}
+						<li class="nav-item px-3">
+                            <div class="p-2 border-rounded d-flex align-items-center">
+								<i class="bi bi-moon-fill text-primary me-2"></i>
+								<div class="form-check form-switch">
+									<input class="form-check-input" type="checkbox" role="switch" id="light-mode">
+									</div>
+								<i class="bi bi-sun-fill text-warning me-2"></i>
+							</div>
+                        </li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<main class="flex-grow-1 container py-4" style="max-width: 90%;">
+		<div class="text-center mb-4 top-margin">
+			<h1>Simulation Metrics</h1>
+			<p class="lead">Comprehensive analysis of traffic simulation performance</p>
+		</div>
+		<div class="row g-4">
+			<!-- Training Metrics Card -->
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header d-flex justify-content-between align-items-center metric-toggle" data-bs-toggle="collapse" data-bs-target="#training-metrics-content">
+						<h5 class="m-0">Training Metrics</h5>
+						<i class="bi bi-chevron-down"></i>
+					</div>
+					<div id="training-metrics-content" class="card-body collapse">
+						{% if metrics_data.training.waiting_times %}
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover table-compact">
+								<thead class="table-primary">
+									<tr>
+										<th>Metric</th>
+										<th>Value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Waiting Time (sec)</td>
+										<td>{{ metrics_data.training.waiting_times|floatformat:2 }}</td>
+									</tr>
+									<tr>
+										<td>Queue Length (Vehicles)</td>
+										<td>{{ metrics_data.training.queue_lengths|floatformat:2 }}</td>
+									</tr>
+									<tr>
+										<td>CO2 Emissions (g)</td>
+										<td>{{ metrics_data.training.co2_emissions|floatformat:2 }}</td>
+									</tr>
+									<tr>
+										<td>Average Speed (km/h)</td>
+										<td>{{ metrics_data.training.avg_speeds|floatformat:2 }}</td>
+									</tr>
+									<tr>
+										<td>Fuel Consumption (L/min)</td>
+										<td>{{ metrics_data.training.fuel_consumption|floatformat:2 }}</td>
+									</tr>
+									<tr>
+										<td>Noise Emission (dB)</td>
+										<td>{{ metrics_data.training.noise_emission|floatformat:2 }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						{% else %}
+						<div class="col-12 text-center">
+							<p class="text-muted">No Training Metrics to display.</p>
+						</div>
+						{% endif %}
+					</div>
+
+				</div>
+			</div>
+			<!-- Testing Metrics Card -->
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header d-flex justify-content-between align-items-center metric-toggle" data-bs-toggle="collapse" data-bs-target="#testing-metrics-content">
+						<h5 class="m-0">Testing Metrics</h5>
+						<i class="bi bi-chevron-down"></i>
+					</div>
+					<div id="testing-metrics-content" class="card-body collapse show">
+						{% if metrics_data.testing %}
+						<div class="row">
+							<div class="col-md-4 mb-3">
+								<h5 class="text-center">Light Traffic</h5>
+								<div class="table-responsive">
+									<table class="table table-bordered table-hover table-compact">
+										<thead class="table-success">
+											<tr>
+												<th>Metric</th>
+												<th>RL Value</th>
+												<th>Baseline</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Rewards</td>
+												<td>{{ metrics_data.testing.rl.light.rewards|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.light.rewards|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Waiting Time (sec)</td>
+												<td>{{ metrics_data.testing.rl.light.waiting_times|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.light.waiting_times|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Queue Length (Vehicles)</td>
+												<td>{{ metrics_data.testing.rl.light.queue_lengths|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.light.queue_lengths|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>CO2 Emissions (g)</td>
+												<td>{{ metrics_data.testing.rl.light.co2_emissions|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.light.co2_emissions|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Average Speed (km/h)</td>
+												<td>{{ metrics_data.testing.rl.light.avg_speeds|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.light.avg_speeds|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Fuel Consumption (L/min)</td>
+												<td>{{ metrics_data.testing.rl.light.fuel_consumption|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.light.fuel_consumption|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Noise Emission (dB)</td>
+												<td>{{ metrics_data.testing.rl.light.noise_emission|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.light.noise_emission|floatformat:2 }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<h5 class="text-center">Normal Traffic</h5>
+								<div class="table-responsive">
+									<table class="table table-bordered table-hover table-compact">
+										<thead class="table-warning">
+											<tr>
+												<th>Metric</th>
+												<th>RL Value</th>
+												<th>Baseline</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Rewards</td>
+												<td>{{ metrics_data.testing.rl.normal.rewards|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.normal.rewards|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Waiting Time (sec)</td>
+												<td>{{ metrics_data.testing.rl.normal.waiting_times|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.normal.waiting_times|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Queue Length (Vehicles)</td>
+												<td>{{ metrics_data.testing.rl.normal.queue_lengths|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.normal.queue_lengths|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>CO2 Emissions (g)</td>
+												<td>{{ metrics_data.testing.rl.normal.co2_emissions|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.normal.co2_emissions|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Average Speed (km/h)</td>
+												<td>{{ metrics_data.testing.rl.normal.avg_speeds|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.normal.avg_speeds|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Fuel Consumption (L/min)</td>
+												<td>{{ metrics_data.testing.rl.normal.fuel_consumption|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.normal.fuel_consumption|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Noise Emission (dB)</td>
+												<td>{{ metrics_data.testing.rl.normal.noise_emission|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.normal.noise_emission|floatformat:2 }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<h5 class="text-center">Heavy Traffic</h5>
+								<div class="table-responsive">
+									<table class="table table-bordered table-hover table-compact">
+										<thead class="table-danger">
+											<tr>
+												<th>Metric</th>
+												<th>RL Value</th>
+												<th>Baseline</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Rewards</td>
+												<td>{{ metrics_data.testing.rl.heavy.rewards|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.heavy.rewards|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Waiting Time (sec)</td>
+												<td>{{ metrics_data.testing.rl.heavy.waiting_times|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.heavy.waiting_times|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Queue Length (Vehicles)</td>
+												<td>{{ metrics_data.testing.rl.heavy.queue_lengths|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.heavy.queue_lengths|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>CO2 Emissions (g)</td>
+												<td>{{ metrics_data.testing.rl.heavy.co2_emissions|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.heavy.co2_emissions|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Average Speed (km/h)</td>
+												<td>{{ metrics_data.testing.rl.heavy.avg_speeds|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.heavy.avg_speeds|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Fuel Consumption (L/min)</td>
+												<td>{{ metrics_data.testing.rl.heavy.fuel_consumption|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.heavy.fuel_consumption|floatformat:2 }}</td>
+											</tr>
+											<tr>
+												<td>Noise Emission (dB)</td>
+												<td>{{ metrics_data.testing.rl.heavy.noise_emission|floatformat:2 }}</td>
+												<td>{{ metrics_data.testing.baseline.heavy.noise_emission|floatformat:2 }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						{% else %}
+						<div class="col-12 text-center">
+							<p class="text-muted">No Test Metrics to display.</p>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header d-flex justify-content-between align-items-center metric-toggle" data-bs-toggle="collapse" data-bs-target="#graphs-content">
+						<h5 class="m-0">Simulation Graphs</h5>
+						<i class="bi bi-chevron-down"></i>
+					</div>
+					<div id="graphs-content" class="card-body collapse show">
+						<div class="row">
+							{% if graph_data%}
+							<div class="table-responsive">
+								<table class="table table-bordered table-hover table-compact">
+									<thead>
+										<tr class="table-primary"><th colspan="1" rowspan="2">Comparison</th><th class="text-center" colspan="3">Traffic Load</th></tr>
+										<tr class="table-primary"><th class="table-success">Light</th><th class="table-warning">Normal</th><th class="table-danger">Heavy</th></tr>
+									</thead>
+									<tbody>
+										{% for graph in graph_data %}
+										<tr>
+											<td>{{ graph.name }}</td>
+											<td>
+												<a href="{% static graph.light '%}" target="_blank">
+													<img src="{% static graph.light '%}" alt="Light Traffic" class="img-fluid">
+												</a>
+											</td>
+											<td>
+												<a href="{% static graph.normal '%}" target="_blank">
+													<img src="{% static graph.normal '%}" alt="Normal Traffic" class="img-fluid">
+												</a>
+											</td>
+											<td>
+												<a href="{% static graph.heavy '%}" target="_blank">
+													<img src="{% static graph.heavy '%}" alt="Heavy Traffic" class="img-fluid">
+												</a>
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+							{% else %}
+							<div class="col-12 text-center">
+								<p class="text-muted">No graphs available to display.</p>
+							</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer class="footer mt-auto py-3 bg-dark text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="text-center">
+                     <p>&copy; {% now "Y" %} Neural Traffic Networks. Group 20.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/theme_toggle.js' %}"></script>
+</body>
+
+</html>
