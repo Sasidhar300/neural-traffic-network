@@ -2,7 +2,11 @@
 
 Neural Traffic Networks (NTN) is a McMaster University Group 20 capstone on multi-agent reinforcement learning for traffic signals. Each intersection observes nearby lanes and chooses a green phase with a PFRL PPO policy backed by a PyTorch BiLSTM. The team compared the learned controller with a round-robin fixed-interval baseline in Eclipse SUMO.
 
-[Historical results and limitations](RESULTS.md) · [Contributions and team credit](CONTRIBUTORS.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) · [Install Ingolstadt21](SCENARIO.md)
+[Historical results and limitations](RESULTS.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) · [Install Ingolstadt21](SCENARIO.md)
+
+## Team and contributions
+
+NTN was built by a five-person McMaster University capstone team. My contributions included early reinforcement learning components, PPO configuration, traffic-demand evaluation, and improvements to environment tests and metrics.
 
 ## How it works
 
